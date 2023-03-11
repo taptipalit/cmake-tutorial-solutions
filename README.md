@@ -24,6 +24,12 @@ the final executable (or final library). In contrast to systems like
 `automake`, CMake is a rich, descriptive, language in itself that can
 decouple the relationships between the build artifacts from the actual compilation steps.
 
+In CMake, each target has properties, such as `LINK_LIBRARIES`,
+`INCLUDE_DIRECTORIES`, `COMPILE_DEFINITIONS`, and commands that update these
+properties, such as `target_link_libraries`, `target_include_directories`,
+`target_compile_definitions`. Each of these commands have an item list and
+options that can customize the operation of these commands.
+
 For example, the `PRIVATE`, `PUBLIC`, and `INTERFACE` inheritance allows you
 to describe whether the **only** the target library, the target library **and** all
 its dependencies, or **only** the dependencies of the target library, link
@@ -33,3 +39,20 @@ BestLibraryInTheWorld)`.
 
 Finally of course, this dependency graph is turned in the specified native
 build system (Ninja, Makefile, etc). 
+
+#### Richness of CMake language
+
+CMake supports list operations, if-then-else conditionals and much more. It
+also supports <em>[Generator
+Expressions]</em>(https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)). 
+These generator expressions are evaluated during the build to produce
+information about the build system. They are written as `$< ... >`. 
+
+For example, `$<C_COMPILER_ID>` returns the compiler id. 
+`$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,ARMClang,GNU,LCC>` return `True`
+if any of the compiler id is one of `AppleClang`, `Clang`, and so on. These
+generator expressions can thus be used to enable compiler-specific options,
+via the `target_compile_options` command using another generator expression.
+E.g. `target_compile_options(MyTarget INTERFACE
+"$<${GCC_LIKE_CC}:-Wall;-Wextra;-Wunused>").
+
