@@ -13,7 +13,8 @@ It's tempting to view CMake as a more convoluted automake-like system, but
 it's so much more than that.
 CMake allows you to decompose your project into different libraries (or
 targets as they're called in the CMake world). Each target has its own include
-directories and further dependencies. If you import a library, you inherit all
+directories and further dependencies (called <em>Usage Requirements</em> in
+the CMake land). If you import a library, you inherit all
 its dependencies automatically. 
 
 Essentially, it turns the project build
