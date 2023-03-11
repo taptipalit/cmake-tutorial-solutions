@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # TODO 7: Create a variable USE_MYMATH using option and set default to ON
+# Later, you can use configure_file along with $VAR$ and #cmakedefine
+# to propagate this as a macro
+option(USE_MYMATH "use custom math library" OFF)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -33,7 +36,10 @@ add_executable(Tutorial tutorial.cxx)
 # TODO 3: Use target_link_libraries to link the library to our executable
 # The first target is well, the "target" and the item (MathFunctions) are 
 # the names of the targets of the libraries added by an add_library 
-target_link_libraries(Tutorial PUBLIC MathFunctions)
+if (USE_MYMATH) 
+    target_link_libraries(Tutorial PUBLIC MathFunctions)
+endif()
+
 
 # TODO 4: Add MathFunctions to Tutorial's target_include_directories()
 # Hint: ${PROJECT_SOURCE_DIR} is a path to the project source. AKA This folder!
